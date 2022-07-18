@@ -1,0 +1,76 @@
+#TWS is a scheduling engine created by IBM.
+#Some organization uses conman commands to handle requests, check status or modify state/status.
+
+
+
+#Assuming the workstation name as Work, Schedule Name as Sched, Job name as Job. Bulelow will be the commands.
+#Comman Commands used in TWS conman.
+
+1. Show schedule status.  
+syntax:	ss Work#Sched(DateTime) -->DateTime is optional if you need to check for a particular date
+	ss @#@ --> To list all schedules
+
+
+2. Show job status.
+syntax:	sj Work#Sched(DateTime).Job
+	sj @#@.@ --> To list all jobs
+
+
+3. Show schedules. This command shows schedules and its state, we can filter schedule which are in a particular state using wildcard.
+syntax:	ss Work#Sched(DateTime)+state=Abend --> Here (+) is a wildcard used to select objects. This will list out he schedule if it is in abend state.
+	ss @#@+state=Abend -->This command will list out all the schedules which are in the specified state. (@) is used to select all.
+
+
+4. Show jobs. This command shows jobs and its state, we can filter schedule which are in a particular state using wildcard.
+syntax:	sj Work#Sched(DateTime).Job+state=Abend --> Here (+) is a wildcard used to select objects. This will list out he schedule if it is in abend state.
+	sj @#@+state=Abend -->This command will list out all the schedules which are in the specified state. (@) is used to select all.
+
+
+5. Cancel schedule. This command is used to cancel a schedule.
+syntax:	cs Work#Sched(DateTime) --> It will cancel the Schedule for specified date. Have a common practice to include date in commands.
+	cs Work#Sched(DateTime)+state=abend;n --> To cancel all schedules in abend state. Here ;n is a noask element added to avoid ask prompt.
+
+
+6 Cancel job. This command is used to cancel a job.
+syntax:	cj Work#Sched(DateTime).Job
+	cj Work#Sched(DateTime).@+state=abend;n To cancel all jobs in abend state. Here ;n is a noask element added to avoid ask prompt.
+
+
+7. kill job. This command is used to kill an executing job.
+syntax:	kill Work#Sched(DateTime).Job 
+	kill Work#Sched(DateTime).@+state=EXEC;n --> It will kill all exec jobs in a schedule.
+
+
+8. Rerun jobs. This command is used to rerun abend or succ jobs.
+syntax:	rr Work#Sched(DateTime).Job
+	rr Work#Sched(DateTime).@+state=abend;n --> It will rerun all jobs in abend status.
+
+
+9. Alter priority. This command is used to change priority of a schedule or job. 
+syntax:	ap Work#Sched;0;n --> This is the lowest priority to keep a schedule in hold and it used to keep a schedule in temporary hold
+	ap Work#Sched.@;0;n --> Using @ wildcard same can be applied to all jobs in a schedule.
+	ap Work#Sched;99;n --> High priority is used to provide a prioriy in execution of a particular schedule.
+	ap Work#Sched.@;0;n --> Using @ wildcard same can be applied to all jobs in a schedule.
+
+
+10. describe a schedule. This command is used to provide details used in schedule file.
+syntax:	ds Work#Sched 
+
+
+11. show cpus. This command is used in master server of tws to check the cpu details
+syntax:	sc
+
+
+12. info command is used to get info about a schedule or a particular job.
+syntax:	ss Work#Sched;info
+	sj Work#Sched.Job;info
+
+
+13. std command is used to get standard log from TWS which contains start and end time along with error in some cases which can be useful for troubleshooting.
+syntax:	ss Work#Sched;std
+	sj Work#Sched.Job;std
+
+
+14. Pipe(|) can be used to do some grep or other linux shell operation.
+syntax:	sj @#@ | grep abedn
+
